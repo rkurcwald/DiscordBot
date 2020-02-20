@@ -40,7 +40,13 @@ async def aliases(ctx):
 async def clear(ctx,amount=10):
     await ctx.channel.purge(limit=amount)
 
+@my_bot.command(aliases=['k'])
+async def kick(ctx, member: discord.Member, *, reason=None):
+    await member.kick(reason=reason)
 
+@my_bot.command(aliases=['b'])
+async def ban(ctx, member: discord.Member, *, reason=None):
+    await member.ban(reason=reason)
 
 @my_bot.event
 async def on_ready():
