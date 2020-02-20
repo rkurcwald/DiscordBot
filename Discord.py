@@ -1,5 +1,6 @@
 import discord
 from discord.ext.commands import Bot
+from discord.ext.commands import has_permissions
 
 TOKEN = 'NTI2Mzk0NzUxMjc3MjAzNDg2.XkkFgA.xqV-hNpg-ZBh93soSe1VfG6KPAA'
 
@@ -12,10 +13,11 @@ my_bot = Bot(command_prefix="!")
                 aliases=['h','info'])
 async def help(ctx):
     helpArray='Witamy {0.author.mention}'.format(ctx)+' w dziale pomocy.\nWpisz !commands w celu sprawdzenia komend\nWpisz !reg w celu sprawdzenia regulaminu\nWpisz !als w celu sprawdzenia skrótów\nMiłych rozmów ;)'
-    if ctx.message.author.server_permissions.ADMINISTRATOR:
-        await ctx.message.channel.send('POMOC ADMINA\n'+helpArray+'\nWpisz !clear <liczba>, by wyczyścić liczbę wiadomości (domyślnie:10)')
-    else:
-        await ctx.message.channel.send(helpArray)
+    #if ctx.message.author.server_permissions.ADMINISTRATOR:
+    #    await ctx.message.channel.send('POMOC ADMINA\n'+helpArray+'\nWpisz !clear <liczba>, by wyczyścić liczbę wiadomości (domyślnie:10)')
+    #else:
+    #    await ctx.message.channel.send(helpArray)
+    await ctx.message.channel.send(helpArray)
 
 
 @my_bot.command(name='commands',
@@ -35,12 +37,13 @@ async def aliases(ctx):
     await ctx.message.channel.send(aliasesArray)
 
 @my_bot.command()
+@commands.has_permissions(MANAGE_MESSAGES=True)
 async def clear(ctx,amount=10):
-    if ctx.message.author.server_permissions.MANAGE_MESSAGES:
-        await ctx.channel.purge(limit=amount)
-    else:
-        permission_error = 'Nie masz odpowiednich uprawnień!'
-        await ctx.message.channel.send(permission_error)
+    await ctx.channel.purge(limit=amount)
+
+@clear.error
+async def kick_error(error, ctx):
+    await ctx.send("Nie masz odpowiednich uprawnień!")
 
 
 @my_bot.event
