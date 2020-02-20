@@ -11,8 +11,11 @@ my_bot = Bot(command_prefix="!")
                 description='Pomoc i podstawowe informacje o serwerze',
                 aliases=['h','info'])
 async def help(ctx):
-    helpArray='Witamy {0.author.mention}'.format(ctx)+' w dziale pomocy.\nWpisz !commands w celu sprawdzenia komend\nWpisz !reg w celu sprawdzenia regulaminu\nMiłych rozmów ;)'
-    await ctx.message.channel.send(helpArray)
+    helpArray='Witamy {0.author.mention}'.format(ctx)+' w dziale pomocy.\nWpisz !commands w celu sprawdzenia komend\nWpisz !reg w celu sprawdzenia regulaminu\nWpisz !als w celu sprawdzenia skrótów\nMiłych rozmów ;)'
+    if ctx.message.author.server_permissions.ADMINISTRATOR:
+        await ctx.message.channel.send('POMOC ADMINA\n'+helpArray+'\nWpisz !clear <liczba>, by wyczyścić liczbę wiadomości (domyślnie:10)')
+    else:
+        await ctx.message.channel.send(helpArray)
 
 
 @my_bot.command(name='commands',
@@ -30,6 +33,14 @@ async def commands(ctx):
 async def aliases(ctx):
     aliasesArray='!help <=> !help, !h, !info\n\!commands <=> !commands, !cmd\n\!register <=> !register, !reg\n!aliases <=> !aliases, !als, !skroty\n'
     await ctx.message.channel.send(aliasesArray)
+
+@my_bot.command()
+async def clear(ctx,amount=10):
+    if ctx.message.author.server_permissions.MANAGE_MESSAGES:
+        await ctx.channel.purge(limit=amount)
+    else:
+        permission_error = 'Nie masz odpowiednich uprawnień!'
+        await ctx.message.channel.send(permission_error)
 
 
 @my_bot.event
