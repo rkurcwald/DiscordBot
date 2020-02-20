@@ -6,8 +6,8 @@ TOKEN = 'NTI2Mzk0NzUxMjc3MjAzNDg2.XkkFgA.xqV-hNpg-ZBh93soSe1VfG6KPAA'
 """client = discord.Client()"""
 my_bot = Bot(command_prefix="!")
 
-
-@my_bot.command(name='help1',
+@my_bot.remove_command("help")
+@my_bot.command(name='help',
                 description='Pomoc i podstawowe informacje o serwerze',
                 aliases=['h','info'])
 async def help(ctx):
