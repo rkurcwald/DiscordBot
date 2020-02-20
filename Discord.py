@@ -1,6 +1,6 @@
 import discord
 from discord.ext.commands import Bot
-from discord.ext.commands import has_permissions
+
 
 TOKEN = 'NTI2Mzk0NzUxMjc3MjAzNDg2.XkkFgA.xqV-hNpg-ZBh93soSe1VfG6KPAA'
 
@@ -37,13 +37,9 @@ async def aliases(ctx):
     await ctx.message.channel.send(aliasesArray)
 
 @my_bot.command()
-@commands.has_permissions(MANAGE_MESSAGES=True)
 async def clear(ctx,amount=10):
     await ctx.channel.purge(limit=amount)
 
-@clear.error
-async def kick_error(error, ctx):
-    await ctx.send("Nie masz odpowiednich uprawnień!")
 
 
 @my_bot.event
